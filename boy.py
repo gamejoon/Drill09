@@ -29,6 +29,12 @@ class AutoRun:
 
     @staticmethod
     def enter(boy, e):
+        if boy.action == 2:
+            boy.dir, boy.action = -1, 0
+        else:
+            boy.dir, boy.action = 1, 1
+        boy.frame = 0
+        boy_start_time = get_time()
         pass
 
     @staticmethod
@@ -37,6 +43,7 @@ class AutoRun:
 
     @staticmethod
     def do(boy):
+
         pass
 
     @staticmethod
