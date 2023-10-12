@@ -34,7 +34,7 @@ class AutoRun:
         else:
             boy.dir, boy.action = 1, 1
         boy.frame = 0
-        boy_start_time = get_time()
+        boy.start_time = get_time()
         pass
 
     @staticmethod
@@ -43,12 +43,18 @@ class AutoRun:
 
     @staticmethod
     def do(boy):
-
+        boy.frame = (boy.frame + 1) % 8
+        boy.x += boy.dir * 5
+        if get_time() - boy.start_time > 5:
+            boy.state_machine.handle_event(('TIME_OUT', 0))
         pass
 
     @staticmethod
     def draw(boy):
-        boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y)
+        if boy.dir == 1:
+            boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y + 35, 200, 200)
+        else:
+            boy.image.clip_composite_draw(boy.frame * 100, boy.action * 100, 100, 100, 0, 'h', boy.x, boy.y + 35, 200, 200)
 
 class Run:
 
@@ -93,7 +99,7 @@ class Sleep:
     def draw(boy):
         if boy.action == 2:
             boy.image.clip_composite_draw(boy.frame * 100, boy.action * 100, 100, 100, math.pi / -2, '', boy.x + 25, boy.y -25, 100, 100)
-        else :
+        else:
             boy.image.clip_composite_draw(boy.frame * 100, boy.action * 100, 100, 100, math.pi / 2, '', boy.x - 25, boy.y - 25, 100, 100)
         pass
 
@@ -130,9 +136,10 @@ class StateMachine:
         self.boy = boy
         self.cur_state = Idle
         self.table = {
-            Idle : {right_down : Run, left_down : Run, left_up : Run, right_up : Run, time_out: Sleep},
+            Idle : {right_down : Run, left_down : Run, left_up : Run, right_up : Run, time_out: Sleep, a_down : AutoRun},
             Run : {right_down : Idle, left_down : Idle, right_up : Idle, left_up : Idle},
-            Sleep : {right_down : Run, left_down : Run, right_up : Run, left_up : Run, space_down : Idle}
+            Sleep : {right_down : Run, left_down : Run, right_up : Run, left_up : Run, space_down : Idle},
+            AutoRun : {time_out : Idle}
         }
     def start(self):
         self.cur_state.enter(self.boy, ('START', 0))
