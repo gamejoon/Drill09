@@ -35,7 +35,6 @@ class AutoRun:
             boy.dir, boy.action = 1, 1
         boy.frame = 0
         boy.start_time = get_time()
-        pass
 
     @staticmethod
     def exit(boy, e):
@@ -51,7 +50,6 @@ class AutoRun:
         boy.x += boy.dir * 10
         if get_time() - boy.start_time > 5:
             boy.state_machine.handle_event(('TIME_OUT', 0))
-        pass
 
     @staticmethod
     def draw(boy):
@@ -74,7 +72,6 @@ class Run:
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
         boy.x += boy.dir * 5
-        pass
 
     @staticmethod
     def draw(boy):
@@ -102,7 +99,6 @@ class Sleep:
             boy.image.clip_composite_draw(boy.frame * 100, boy.action * 100, 100, 100, math.pi / -2, '', boy.x + 25, boy.y -25, 100, 100)
         else:
             boy.image.clip_composite_draw(boy.frame * 100, boy.action * 100, 100, 100, math.pi / 2, '', boy.x - 25, boy.y - 25, 100, 100)
-        pass
 
 class Idle:
 
@@ -130,7 +126,6 @@ class Idle:
     @staticmethod
     def draw(boy):
         boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y)
-        pass
 
 class StateMachine:
     def __init__(self, boy):
@@ -153,7 +148,6 @@ class StateMachine:
                 self.cur_state.enter(self.boy, e)
                 return True
         return False
-        pass
 
     def update(self):
         self.cur_state.do(self.boy)
@@ -176,7 +170,6 @@ class Boy:
     def handle_event(self, event):
         print(event)
         self.state_machine.handle_event(('INPUT', event))
-        pass
 
     def draw(self):
         self.state_machine.draw()
