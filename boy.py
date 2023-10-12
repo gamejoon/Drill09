@@ -29,9 +29,9 @@ class AutoRun:
 
     @staticmethod
     def enter(boy, e):
-        if boy.action == 2:
+        if a_down(e) and boy.action == 2:
             boy.dir, boy.action = -1, 0
-        else:
+        elif a_down(e) and boy.action == 3:
             boy.dir, boy.action = 1, 1
         boy.frame = 0
         boy.start_time = get_time()
@@ -43,18 +43,19 @@ class AutoRun:
 
     @staticmethod
     def do(boy):
+        if boy.x + 20 >= 800 and boy.dir == 1:
+            boy.dir, boy.action = -1, 0
+        elif boy.x - 20 <= 0 and boy.dir == -1:
+            boy.dir, boy.action = 1, 1
         boy.frame = (boy.frame + 1) % 8
-        boy.x += boy.dir * 5
+        boy.x += boy.dir * 10
         if get_time() - boy.start_time > 5:
             boy.state_machine.handle_event(('TIME_OUT', 0))
         pass
 
     @staticmethod
     def draw(boy):
-        if boy.dir == 1:
-            boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y + 35, 200, 200)
-        else:
-            boy.image.clip_composite_draw(boy.frame * 100, boy.action * 100, 100, 100, 0, 'h', boy.x, boy.y + 35, 200, 200)
+        boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y + 35, 200, 200)
 
 class Run:
 
